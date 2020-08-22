@@ -2,6 +2,8 @@ import tkinter
 import time
  
 print("omg are you alright?")
+print('testing123')
+print("i hope the cat was safe") 
  
 # width of the animation window
 animation_window_width=800
