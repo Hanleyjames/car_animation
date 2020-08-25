@@ -1,11 +1,12 @@
 import tkinter
 import time
 import person
+import roads
 
 # width of the animation window
-animation_window_width=800
+animation_window_width=1200
 # height of the animation window
-animation_window_height=600
+animation_window_height=720
 # initial x position of the ball
 animation_ball_start_xpos = 50
 # initial y position of the ball
@@ -24,6 +25,10 @@ animation_car_size_y = 15
 animation_car_position_x = 3
 animation_car_position_y = 10
 
+#NUMBER OF PIXELS ROADS MOVE EACH TICK:
+road_move_x=0
+road_move_y=5
+
 
 # The main window of the animation
 def create_animation_window():
@@ -36,12 +41,12 @@ def create_animation_window():
 # Create a canvas for animation and add it to main window
 def create_animation_canvas(window):
   canvas = tkinter.Canvas(window)
-  canvas.configure(bg="black")
+  canvas.configure(bg="white")
   canvas.pack(fill="both", expand=True)
   return canvas
 
 # Create and animate ball in an infinite loop
-def animate_ball(window, canvas,xinc,yinc):
+def animate_ball(window, canvas,xinc,yinc, object_dict):
   ball = canvas.create_oval(animation_ball_start_xpos-animation_ball_radius,
             animation_ball_start_ypos-animation_ball_radius,
             animation_ball_start_xpos+animation_ball_radius,
@@ -52,6 +57,10 @@ def animate_ball(window, canvas,xinc,yinc):
 #main loop
   while True:
     canvas.move(ball,xinc,yinc)
+    
+    for key in object_dict:
+        if key == 'road':
+            roads.move_roads(canvas,object_dict[key],road_move_x,road_move_y)
 
     window.update()
     time.sleep(animation_refresh_seconds)
@@ -83,7 +92,17 @@ def ballshit(canvas,ball,animation_window_width,animation_window_height,xinc,yin
 # The actual execution starts here
 animation_window = create_animation_window()
 animation_canvas = create_animation_canvas(animation_window)
+
+#Store references to all objects created here. Each function should return a list, which will be in this dictionary
+# with an appropriate key
+
+all_objects={}
+
 test_car(animation_canvas)
 person.create_group(animation_canvas)
-animate_ball(animation_window,animation_canvas, animation_ball_min_movement, animation_ball_min_movement)
+animation_window.update()
+road_segs=roads.create_roads(animation_canvas, animation_window, 1)
+
+all_objects['road']=road_segs
+animate_ball(animation_window,animation_canvas, animation_ball_min_movement, animation_ball_min_movement, all_objects)
 #test_car(animation_canvas)
