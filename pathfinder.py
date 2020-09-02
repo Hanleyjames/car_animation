@@ -52,7 +52,7 @@ def create_cars(canvas, window):
     number=canvas.create_text((x1+x2)/2,(y1+y2)/2, font=("Arial",8), text=str(1))
     
     pfo.text_obj=number
-    pfo.way_points=[(112,175),(212,112),(550,440)]
+    pfo.way_points=[(-99,50),(112,175),(212,112),(550,440)]
     pfo.wayx=0
     pfo.wayy=0    
     cars.append([PF,pfo])
@@ -119,18 +119,21 @@ class PathFinder:
         self.text_obj=0
         
         self.rotate_on=False
+        self.HOLD=False
+        self.hold_timer=0
         self.tick=0
         
         self.way_points=[]
     
     def update(self,canvas, pf):
-        self.check_state()
-        self.set_waypoints(canvas,pf)
-        self.set_velocities()
-        canvas.move(pf,self.xv, self.yv)
-        canvas.move(self.text_obj,self.xv, self.yv)
-        self.x+=self.xv
-        self.y+=self.yv
+        if not self.check_hold(canvas,pf):
+            self.check_state()
+            self.set_waypoints(canvas,pf)
+            self.set_velocities()
+            canvas.move(pf,self.xv, self.yv)
+            canvas.move(self.text_obj,self.xv, self.yv)
+            self.x+=self.xv
+            self.y+=self.yv
         
         if self.rotate_on:
             pf=self.rotate(canvas,pf)
@@ -144,7 +147,20 @@ class PathFinder:
         else:
             self.wayx="stop"
             self.wayy="stop"
-           
+    
+    def check_hold(self,canvas,pf):
+        if self.wayx==-99 and not self.HOLD:
+            self.HOLD=True
+        
+        elif self.HOLD:
+            self.hold_timer+=1
+        
+        if self.HOLD and self.hold_timer>self.wayy:
+            self.HOLD=False
+            self.hold_timer=0
+            self.way_point+=1
+        return self.HOLD
+            
     def check_state(self):
         if self.wayx != "stop" and self.wayy != "stop":
             if abs(self.x-self.wayx)<3 and abs(self.y-self.wayy)<3 :
