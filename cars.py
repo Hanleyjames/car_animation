@@ -8,33 +8,81 @@ def create_cars(canvas, window, scale):
     window_left=0
     window_right=window.winfo_width()
     road_center=window_right/2
-    
-    car_w=25
-    car_h=25
+    road_width=window_right/6
+
     
     NUM_WIDE=4
     NUM_TALL=3
     
+    car_w=road_width/NUM_WIDE
+    car_h=road_width/NUM_TALL
+    
+    
+    
+    FRONT_SPACE=200
+    CAR_SPACER=2
+    
+    CAR_NUMBER=0
+    
     #Initiate Front Cars
     
-    #Init Side Cars
+    #Front position  
+    FRONT_START=window_bottom - (NUM_TALL*car_h + FRONT_SPACE)
     
-    #Init Back Cars
-    
-    
-    for i in range (0,5):
-        for j in range (0,5):
+    for i in range (0,NUM_WIDE):
+        x1=road_center-(.5*road_width)+i*CAR_SPACER+i*car_w - (NUM_WIDE/2 * CAR_SPACER)
+        x2=x1+car_w
+        y1=FRONT_START
+        y2=y1+car_h
         
-            x1=road_center-3*car_w + (i%5) * car_w 
-            x2=x1+car_w
-            y1=window_bottom - car_h*j - 50
-            y2=y1-car_h
-            
-            seg = canvas.create_rectangle(x1,
-            y1,
-            x2,
-            y2,
-            fill="yellow", outline="black", width=1)
-            cars.append(seg)
+        seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="green", outline="black", width=1)
+        cars.append(seg)        
+    
+    #Init Side Cars
+    for i in range (0,NUM_WIDE):
+        x1=road_center-(.5*road_width)+i*CAR_SPACER+i*car_w - (NUM_WIDE/2 * CAR_SPACER)
+        x2=x1+car_w
+        y1=FRONT_START+ car_h+CAR_SPACER
+        y2=y1+car_h
+        
+        seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="yellow", outline="black", width=1)
+        cars.append(seg) 
+    #Init Side Cars #2
+    for i in range (0,NUM_WIDE):
+        x1=road_center-(.5*road_width)+i*CAR_SPACER+i*car_w - (NUM_WIDE/2 * CAR_SPACER)
+        x2=x1+car_w
+        y1=FRONT_START+ 2*(car_h+CAR_SPACER)
+        y2=y1+car_h
+        
+        seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="yellow", outline="black", width=1)
+        cars.append(seg) 
+
+ 
+    #Init Back Cars
+    for i in range (0,NUM_WIDE):
+        x1=road_center-(.5*road_width)+i*CAR_SPACER+i*car_w - (NUM_WIDE/2 * CAR_SPACER)
+        x2=x1+car_w
+        y1=window_bottom
+        y2=y1-car_h
+        
+        seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="red", outline="black", width=1)
+        cars.append(seg)     
+    
     return cars
             

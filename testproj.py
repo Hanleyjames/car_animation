@@ -29,7 +29,7 @@ animation_car_position_y = 10
 #NUMBER OF PIXELS ROADS MOVE EACH TICK:
 #also should be the camera speed
 road_move_x=0
-road_move_y=5
+road_move_y=2
 
 
 # The main window of the animation
