@@ -50,11 +50,14 @@ animation_canvas = create_animation_canvas(animation_window)
 #CRITICAL!!!
 animation_window.update()
 
-static_objects=static_objects.create_roads(animation_canvas, animation_window)
+static_object_list=static_objects.create_roads(animation_canvas, animation_window)
+static_objects.draw_grids(animation_canvas, animation_window)
 
 animation_objects=[]
 
 animation_objects.append(pathfinder.create_pathfinder(animation_canvas, animation_window))
-
+cars=(pathfinder.create_cars(animation_canvas, animation_window))
+for car in cars:
+    animation_objects.append(car)
 start_animation(animation_window,animation_canvas,animation_objects)
 #test_car(animation_canvas)

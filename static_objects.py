@@ -82,6 +82,25 @@ def create_roads(canvas, window):
 
     return road_segs
         
-        
+def draw_grids(canvas, window):
+    window_bottom=window.winfo_height()
+    window_top=0
+    window_left=0
+    window_right=window.winfo_width()
     
+    GRID_SPACE=25
+    
+    i=0
+    while i<window_bottom:
+        canvas.create_line(window_left, i, window_right, i, dash=(4, 2))
+        canvas.create_text(window_left+25,i, font=("Arial",8),
+            text=str(i))
+        i+=GRID_SPACE
+    
+    i=0
+    while i<window_right:
+        canvas.create_line(i, window_top, i, window_bottom, dash=(4, 2))
+        canvas.create_text(i, window_top+25, font=("Arial",8),
+            text=str(i))
+        i+=GRID_SPACE    
             
