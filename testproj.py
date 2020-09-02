@@ -29,7 +29,7 @@ animation_car_position_y = 10
 #NUMBER OF PIXELS ROADS MOVE EACH TICK:
 #also should be the camera speed
 road_move_x=0
-road_move_y=2
+road_move_y=5
 
 
 # The main window of the animation
@@ -56,19 +56,43 @@ def animate_ball(window, canvas,xinc,yinc, object_dict):
             fill="blue", outline="white", width=4)
   #test_car(animation_canvas)
 
-#main loop
+  
+  window_bottom=window.winfo_height()
+  window_top=0
+  window_left=0
+  window_right=window.winfo_width()
+  
+  PAUSE=False
+  until_pause_counter=0
+  TIME_TO_NEXT_PAUSE=(1.5*window_bottom)/road_move_y
+  PAUSE_DURATION=100
+  pause_timer=0  
+  
+  #main loop
   while True:
     canvas.move(ball,xinc,yinc)
     
     for key in object_dict:
         if key == 'road':
-            roads.move_roads(canvas,object_dict[key],road_move_x,road_move_y)
+            if not PAUSE:
+                roads.move_roads(canvas,object_dict[key],road_move_x,road_move_y)
+                #Ballshit
+                xinc, yinc = ballshit(canvas,ball,animation_window_width,animation_window_height,xinc,yinc)
+                
+                until_pause_counter+=1
+                if until_pause_counter >= TIME_TO_NEXT_PAUSE:
+                    until_pause_counter=0
+                    PAUSE=True
+            else:
+                pause_timer+=1
+                if pause_timer >= PAUSE_DURATION:
+                    pause_timer=0
+                    PAUSE=False
 
     window.update()
     time.sleep(animation_refresh_seconds)
 
-    #Ballshit
-    xinc, yinc = ballshit(canvas,ball,animation_window_width,animation_window_height,xinc,yinc)
+
 """
     ball_pos = canvas.coords(ball)
     # unpack array to variables

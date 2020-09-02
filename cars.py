@@ -22,7 +22,7 @@ def create_cars(canvas, window, scale):
     FRONT_SPACE=200
     CAR_SPACER=2
     
-    CAR_NUMBER=0
+    car_number=0
     
     #Initiate Front Cars
     
@@ -40,7 +40,12 @@ def create_cars(canvas, window, scale):
         x2,
         y2,
         fill="green", outline="black", width=1)
-        cars.append(seg)        
+        
+        
+        carnum=canvas.create_text(x1+car_w/3, y1+car_h/4, font="Arial",
+        text=str(car_number))
+        cars.append([seg,car_number, carnum])
+        car_number+=1       
     
     #Init Side Cars
     for i in range (0,NUM_WIDE):
@@ -54,7 +59,10 @@ def create_cars(canvas, window, scale):
         x2,
         y2,
         fill="yellow", outline="black", width=1)
-        cars.append(seg) 
+        carnum=canvas.create_text(x1+car_w/3, y1+car_h/4, font="Arial",
+        text=str(car_number))
+        cars.append([seg,car_number, carnum])
+        car_number+=1        
     #Init Side Cars #2
     for i in range (0,NUM_WIDE):
         x1=road_center-(.5*road_width)+i*CAR_SPACER+i*car_w - (NUM_WIDE/2 * CAR_SPACER)
@@ -67,7 +75,10 @@ def create_cars(canvas, window, scale):
         x2,
         y2,
         fill="yellow", outline="black", width=1)
-        cars.append(seg) 
+        carnum=canvas.create_text(x1+car_w/3, y1+car_h/4, font="Arial",
+        text=str(car_number))
+        cars.append([seg,car_number, carnum])
+        car_number+=1 
 
  
     #Init Back Cars
@@ -82,7 +93,10 @@ def create_cars(canvas, window, scale):
         x2,
         y2,
         fill="red", outline="black", width=1)
-        cars.append(seg)     
+        carnum=canvas.create_text(x1+car_w/3, y2+car_h/4, font="Arial",
+        text=str(car_number))
+        cars.append([seg,car_number, carnum])
+        car_number+=1       
     
     return cars
             
