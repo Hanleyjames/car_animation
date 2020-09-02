@@ -65,7 +65,7 @@ def animate_ball(window, canvas,xinc,yinc, object_dict):
   PAUSE=False
   until_pause_counter=0
   TIME_TO_NEXT_PAUSE=(1.5*window_bottom)/road_move_y
-  PAUSE_DURATION=100
+  PAUSE_DURATION=200
   pause_timer=0  
   
   #main loop
