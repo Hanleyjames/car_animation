@@ -2,6 +2,7 @@ import tkinter
 import time
 import person
 import roads
+import cars
 
 # width of the animation window
 animation_window_width=1200
@@ -26,6 +27,7 @@ animation_car_position_x = 3
 animation_car_position_y = 10
 
 #NUMBER OF PIXELS ROADS MOVE EACH TICK:
+#also should be the camera speed
 road_move_x=0
 road_move_y=5
 
@@ -102,6 +104,7 @@ test_car(animation_canvas)
 person.create_group(animation_canvas)
 animation_window.update()
 road_segs=roads.create_roads(animation_canvas, animation_window, 1)
+car_brigade=cars.create_cars(animation_canvas, animation_window, 1)
 
 all_objects['road']=road_segs
 animate_ball(animation_window,animation_canvas, animation_ball_min_movement, animation_ball_min_movement, all_objects)

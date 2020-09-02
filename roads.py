@@ -48,9 +48,9 @@ def create_roads(canvas, window, scale):
     road_segs.append(seg)
 
 
-    # intersection 1, left road
-    #bottom line
+    # intersection 1, left road 90 deg
     
+        #bottom line    
     x1=0
     x2=int(road_center-window_right/12)
     y1=-1*window_bottom-int(window_right/6) 
@@ -63,7 +63,7 @@ def create_roads(canvas, window, scale):
         fill="black", outline="black", width=1)
     road_segs.append(seg)
 
-    #top line
+        #top line
     x1=0
     x2=int(road_center-window_right/12)
     y1=-1*window_bottom 
@@ -74,7 +74,69 @@ def create_roads(canvas, window, scale):
         x2,
         y2,
         fill="black", outline="black", width=1)
+        
     road_segs.append(seg)
+    
+    #right section 90 deg of first intersection
+    
+        #bottom line
+    x1=int(road_center+window_right/12)
+    x2=window_right
+    y1=-1*window_bottom-int(window_right/6) 
+    y2=-1*window_bottom-int(window_right/6)-seg_width
+    
+    seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="black", outline="black", width=1)
+    road_segs.append(seg)
+
+    #top line
+    x1=int(road_center+window_right/12)
+    x2=window_right
+    y1=-1*window_bottom 
+    y2=-1*window_bottom-seg_width
+    
+    seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="black", outline="black", width=1)
+        
+    road_segs.append(seg)
+
+    # Second Section of road (straight from 1st intersection
+    #left line
+
+    x1=int(road_center-window_right/12)
+    x2=int(road_center-window_right/12)+seg_width
+    y1=-1*window_bottom-int(window_right/6)-seg_width
+    y2=-2*window_bottom-int(window_right/6)-seg_width
+    seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="black", outline="black", width=1)
+    road_segs.append(seg)
+    
+    #right line
+    window_bottom=window.winfo_height()
+    window_top=0
+    window_left=0
+    window_right=window.winfo_width()
+    road_center=window_right/2
+    x1=int(road_center+window_right/12)
+    x2=int(road_center+window_right/12)+seg_width
+    y1=-1*window_bottom-int(window_right/6)-seg_width
+    y2=-2*window_bottom-int(window_right/6)-seg_width
+    seg = canvas.create_rectangle(x1,
+        y1,
+        x2,
+        y2,
+        fill="black", outline="black", width=1)
+    road_segs.append(seg)    
+    
     
     return road_segs
     
