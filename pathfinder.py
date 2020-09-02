@@ -1,4 +1,5 @@
 import itertools
+import math
 def create_pathfinder(canvas, window):
     window_bottom=window.winfo_height()
     window_top=0
@@ -35,6 +36,8 @@ class PathFinder:
         self.yv=1
         self.way_point=0
         self.MAX_SPEED=1
+        
+        self.tick=0
     
     def update(self,canvas, pf):
         self.check_state()
@@ -45,7 +48,8 @@ class PathFinder:
         self.x+=self.xv
         self.y+=self.yv
         
-        #pf=self.rotate(canvas,pf)
+        pf=self.rotate(canvas,pf)
+        self.tick+=.1
         return pf
     
     def set_waypoints(self,canvas,pf):
@@ -55,7 +59,7 @@ class PathFinder:
         elif self.way_point==1:
             self.wayx=550
             self.wayy=150
-            pf=self.rotate(canvas,pf)            
+            #pf=self.rotate(canvas,pf)            
         elif self.way_point==2:
             self.wayx=550
             self.wayy=430    
@@ -92,12 +96,33 @@ class PathFinder:
 
     def rotate(self,canvas,pf):
         
-        newxy=[ (self.x-self.wi/2, self.y),(self.x,self.y-self.he/2),(self.x+self.wi/2, self.y),(self.x,self.y+self.he/2)]
+        oldcoords=canvas.coords(pf)
+        print(oldcoords)
         cleanxy=[]
-        for cor in newxy:
-            cleanxy.append( (int(cor[0]),int(cor[1])) )
-        print(cleanxy)
+        
+        counter=0
+        newcoords=[]
+        for coord in oldcoords:
+            newcoords.append(coord)
+        newcoords[0]=newcoords[0]+math.sin(self.tick)
+        newcoords[1]=newcoords[1]+math.cos(self.tick)
+        
+        newcoords[2]=newcoords[2]+math.sin(self.tick)
+        newcoords[3]=newcoords[3]+math.cos(self.tick)
+        
+        newcoords[4]=newcoords[4]+math.sin(self.tick)
+        newcoords[5]=newcoords[5]+math.cos(self.tick)
+        
+        newcoords[6]=newcoords[6]+math.sin(self.tick)
+        newcoords[7]=newcoords[7]+math.cos(self.tick)
+        
+        newcoords[8]=newcoords[8]+math.sin(self.tick)
+        newcoords[9]=newcoords[9]+math.cos(self.tick)
+
+        #print(cleanxy)
         #canvas.delete(pf)
-        PF = canvas.coords(pf,*self.flatten(cleanxy))
+        PF = canvas.coords(pf,oldcoords)
+        PF = canvas.coords(pf,newcoords)
+        #PF = canvas.coords(pf,*self.flatten(cleanxy))
         return PF
         
