@@ -32,6 +32,7 @@ def create_animation_canvas(window):
 def start_animation(window, canvas, objects): 
   #main loop
   while True:
+
     for obj in objects:
         obj[1].update(canvas,obj[0])
     window.update()
