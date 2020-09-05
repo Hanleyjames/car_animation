@@ -3,6 +3,7 @@ import time
 import roads3
 import static_objects
 import CarObj
+import car_func
 
 
 # width of the animation window
