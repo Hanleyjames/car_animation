@@ -1,4 +1,6 @@
 CAR_SPEED = 1.5
+SMOOTH=2
+DRAW_ROUTES=False
 
 class Car:
     def __init__(self, sprite, sprite2, canvas, x, y, w, h, route, car_number, wait_instr=[]):
@@ -28,9 +30,20 @@ class Car:
         # if HOLD is true, the car will continue to it's current waypoint and then stop
         self.HOLD=True
     
+    def check_status(self):
+        
+        return (abs(self.x - self.wayx)<=(SMOOTH+1) and abs(self.y - self.wayy)<=(SMOOTH+1))
+    
+    def incr_way_point(self):
+        if self.way_point<(len(self.route)-1):
+            self.way_point+=1
+            self.wayx=self.route[self.way_point][0]
+            self.wayy=self.route[self.way_point][1]
+        
+        print(self.car_number, 'incremented to', self.way_point, self.wayx, self.wayy)
     def update(self, objects):
         
-        self.check_waypoint()
+        #self.check_waypoint()
         self.set_velocities()
         #self.check_wait(objects)
         
@@ -39,7 +52,8 @@ class Car:
 
         self.canvas.move(self.sprite, self.xv, self.yv)
         self.canvas.move(self.sprite2, self.xv, self.yv)
-        
+    
+    #Obsolete
     def check_waypoint(self):
         if abs(self.x-self.wayx)<4 and abs(self.y-self.wayy)<4:
             if not self.HOLD:
@@ -55,17 +69,17 @@ class Car:
     
     def set_velocities(self):
         
-        if self.x < self.wayx:
+        if self.x < self.wayx  and abs(self.x - self.wayx)>SMOOTH:
             self.xv=CAR_SPEED
-        elif self.x > self.wayx:
+        elif self.x > self.wayx and abs(self.x - self.wayx)>SMOOTH:
             self.xv=-1*CAR_SPEED
         else:
             self.xv=0
         
         
-        if self.y  < self.wayy:
+        if self.y  < self.wayy and abs(self.y - self.wayy)>SMOOTH:
             self.yv = CAR_SPEED
-        elif self.y > self.wayy:
+        elif self.y > self.wayy and abs(self.y - self.wayy)>SMOOTH:
             self.yv = -1*CAR_SPEED
         else:
             self.yv=0
@@ -89,17 +103,17 @@ class Route:
         self.car_color=car_color
         self.offset=offset
     def draw_points(self):
-        
-        for i in range (0,len(self.points)):
-            point_A=self.points[i]
-            if i < (len(self.points)-1):
-                point_B=self.points[i+1]
-            else:
-                point_B=(-1,-1)
-            
-            if point_B[0]!=-1:
-                self.canvas.create_line(point_A[0], point_A[1]+self.offset, point_B[0], point_B[1]+self.offset, fill=self.car_color )
-                self.canvas.create_text(point_A[0],point_A[1]+self.offset, font=("Arial",10), text=str(i),fill=self.car_color)
+        if DRAW_ROUTES:
+            for i in range (0,len(self.points)):
+                point_A=self.points[i]
+                if i < (len(self.points)-1):
+                    point_B=self.points[i+1]
+                else:
+                    point_B=(-1,-1)
+                
+                if point_B[0]!=-1:
+                    self.canvas.create_line(point_A[0], point_A[1]+self.offset, point_B[0], point_B[1]+self.offset, fill=self.car_color )
+                    self.canvas.create_text(point_A[0],point_A[1]+self.offset, font=("Arial",10), text=str(i),fill=self.car_color)
 
         
 def create_cars(canvas, window):

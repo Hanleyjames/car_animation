@@ -1,6 +1,7 @@
 import tkinter
 import time
 import pandas as pd
+import os
 
 
 import roads3
@@ -50,11 +51,12 @@ def start_animation(window, canvas, objects):
   #df2=splice_df(df)
   
   df2=pd.read_csv("C:\\Users\\V\\car_animation\\real_routes.csv")
+  df2=df2.drop(['NOTES'], axis=1)
   df3=desplice(df2)
   load_csv_to_routes(objects, DF=df3)
   
   # fast forward method for testing
-  fast_forward(objects, 60, canvas)
+  fast_forward(objects, 0, canvas)
   
   def key(event):
     #print ("pressed", repr(event.char))
@@ -62,35 +64,43 @@ def start_animation(window, canvas, objects):
     print(event.keycode)
     if event.keycode == 83:
         
-        print('special!')
-        CPW=0
+        print('pause/unpause called')
         for obj in objects:
-            
+            CPW=obj.way_point
             if obj.HOLD:
                 obj.HOLD=False
-                obj.way_point+=1
             else:
                 obj.HOLD=True
-            CPW=obj.way_point
-        canvas.create_text(100+25*CPW,50, font=("Arial",12), text=str(CPW))
+        canvas.create_text(100+12*CPW,50, font=("Arial",12), text=str(CPW))
     elif event.keycode == 8:
         print('rewind')
-        CPW=0
         for obj in objects:
-            
-            if obj.HOLD:
-                obj.HOLD=False
-                obj.way_point-=1
-            else:
-                obj.HOLD=True
+            obj.way_point-=1
             CPW=obj.way_point
-        canvas.create_text(100+25*CPW,60, font=("Arial",12), text=str(CPW))    
+        canvas.create_text(100+12*CPW,60, font=("Arial",12), text=str(CPW))    
+    elif event.keycode == 87:
+        print('fastforward')
+        for obj in objects:
+            obj.way_point+=1
+            CPW=obj.way_point
+        canvas.create_text(100+12*CPW,70, font=("Arial",12), text=str(CPW)) 
   window.bind("<Key>", key)
   
-  #main loop  
+  #main loop
+  PLAY=True
   while True:    
     for obj in objects:
         obj.update(objects)
+        
+    if PLAY:
+        increment=True
+        for obj in objects:
+            if not obj.check_status():
+                increment=False
+        if increment:
+            for obj in objects:
+                if not obj.HOLD:
+                    obj.incr_way_point()
     window.update()
     time.sleep(animation_refresh_seconds)
 def create_static_objects(window, canvas):
@@ -106,6 +116,7 @@ def convert_route_to_csv(objects):
             route+=[(0,0)]
         df[object.car_number]=route
     path="C:\\Users\\V\\car_animation\\"
+    path=os.getcwd()
     df.to_csv(path+"routes.csv")
     return df
 
@@ -113,6 +124,7 @@ def load_csv_to_routes(objects, DF=1):
     if isinstance(DF, int):
         print('reading from old routes files')
         path="C:\\Users\\V\\car_animation\\"
+        path=os.getcwd()
         df=pd.read_csv(path+"routes.csv")
     else:
         print('using passed dataframe')
@@ -158,6 +170,7 @@ def fast_forward(objects, waypoint, canvas):
         
 def splice_df(df):
     path="C:\\Users\\V\\car_animation\\"
+    path=os.getcwd()
     df2=pd.DataFrame()
         
     for col in df.columns:
@@ -177,7 +190,8 @@ def splice_df(df):
 def desplice(df):
     print('desplicing')
     print(df.columns)
-    path="C:\\Users\\V\\car_animation\\"    
+    path="C:\\Users\\V\\car_animation\\"
+    path=os.getcwd()    
     i=0
     df2=pd.DataFrame()
     while i < len(df.columns):
@@ -208,8 +222,11 @@ animation_window.update()
 
 animation_objects=[]
 
-static_objects.draw_grids(animation_canvas, animation_window)
+#grid lines for testing
+#static_objects.draw_grids(animation_canvas, animation_window)
+
 roads3.create_roads(animation_canvas, animation_window)
+
 animation_objects+=CarObj.create_cars(animation_canvas, animation_window)
 
 
